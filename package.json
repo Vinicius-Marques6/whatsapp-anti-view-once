@@ -1,0 +1,15 @@
+{
+  "name": "whatsapp-anti-view-once",
+  "version": "1.0.0",
+  "description": "A simple WhatsApp bot that can download view-once media.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.23.0"
+  }
+}
