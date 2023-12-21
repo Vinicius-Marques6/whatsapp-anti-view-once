@@ -22,10 +22,10 @@ client.on('message_reaction', async (reaction) => {
         }
         try {
             const reactedMsg = await getReactedMsg(reaction.msgId._serialized, 1);
+            
+            if (reactedMsg && !reactedMsg.hasMedia) return;
+            
             await reactedMsg.react("");
-
-            if (!reactedMsg.hasMedia) return;
-
             const attachmentData = await reactedMsg.downloadMedia();
 
             if (!attachmentData) return;
@@ -63,6 +63,6 @@ async function getReactedMsg(msgId, tries) {
 
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        return getReactedMsg(msgId, ++tries);
+        return await getReactedMsg(msgId, ++tries);
     }
 }
