@@ -1,6 +1,8 @@
 const qrcode = require('qrcode-terminal');
 const { Client, LocalAuth } = require('whatsapp-web.js');
+
 const MAX_TRIES = 10;
+const INITIALIZATION_TIMESTAMP = Date.now() / 1000;
 
 const client = new Client({
     authStrategy: new LocalAuth()
@@ -15,6 +17,7 @@ client.on('ready', () => {
 });
 
 client.on('message_reaction', async (reaction) => {
+    if (reaction.timestamp < INITIALIZATION_TIMESTAMP) return; // Ignore reactions from before the client was initialized.
     if (reaction.id.fromMe && reaction.reaction !== '') {
         const options = {
             caption: "🤖: Aqui está o arquivo que você reagiu.",
@@ -61,7 +64,7 @@ async function getReactedMsg(msgId, tries) {
     } catch (error) {
         console.log(`Não foi possível recuperar a mensagem reagida. Tentativa ${tries} de ${MAX_TRIES}.`);
 
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => setTimeout(resolve, 200));
 
         return await getReactedMsg(msgId, ++tries);
     }
